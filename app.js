@@ -234,6 +234,19 @@ const removeItem = id => {
   renderCart();
 };
 
+function placeOrder() {
+  if (!cart.length) return;
+
+  cart = [];
+  saveCart();
+  updateBadge();
+  renderCart();
+  hideCart();
+
+  showToast('Commande validée');
+}
+
+
 function updateBadge() {
   const total = cart.reduce((s, i) => s + i.qty, 0);
   badgeEl.textContent = total;

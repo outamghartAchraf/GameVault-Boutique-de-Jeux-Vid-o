@@ -122,6 +122,25 @@ categories.forEach((cat, index) => {
   filtersEl.appendChild(btn);
 });
 
+
+function addToCart(id, btn) {
+  const game = games.find(g => g.id === id);
+  if(!game) return;
+
+  const item = cart.find(i => i.game.id === id);
+
+  item ? item.qty++ : cart.push({ game, qty:1 });
+
+  saveCard();
+
+  if(btn) {
+    const old = btn.innerHTML;
+    btn.innerHTML = 'Ajouté';
+    setTimeout(() => btn.innerHTML = old, 800);
+  }
+
+}
+
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
   renderCatalogue();

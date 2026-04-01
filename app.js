@@ -156,6 +156,9 @@ const hideCart = () => {
   document.body.style.overflow = '';
 }
 
+const fmt = n =>
+  n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+
 function renderCart() {
   cartListEl.innerHTML = '';
 
@@ -271,7 +274,8 @@ function showToast(msg) {
  
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
-  renderCatal
+  renderCatalogue();
+});
 
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
@@ -282,6 +286,13 @@ searchInput.addEventListener('input', e => {
 
 cartBtn.addEventListener('click', showCart);
 backBtn.addEventListener('click', hideCart);
+orderBtn.addEventListener('click', placeOrder);
 
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') hideCart();
+});
+
+ 
+loadCart();
+updateBadge();
 renderCatalogue();
-renderCart();

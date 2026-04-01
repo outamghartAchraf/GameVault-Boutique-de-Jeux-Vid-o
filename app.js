@@ -122,5 +122,10 @@ categories.forEach((cat, index) => {
   filtersEl.appendChild(btn);
 });
 
+searchInput.addEventListener('input', e => {
+  searchQuery = e.target.value;
+  renderCatalogue();
+});
+
 
 renderCatalogue();

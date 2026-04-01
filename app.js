@@ -26,23 +26,26 @@ const orderBtn = document.getElementById('orderBtn');
 
 const toastEl = document.getElementById('toast');
 
-const loadCard = () => cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-const saveCard = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
+const loadCart = () => cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+const saveCart = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
 function renderCatalogue() {
-    let filtered = games;
-     
-    if(activeGenre !== "Tous") {
-      filtered = filtered.filter(g => g.genre === activeGenre);
-    }
+  let filtered = games;
 
-    if(searchQuery) {
-      filtered = filtered.filter(g => 
-        g.title.toLowerCase().includes(searchQuery.toLowerCase()));
-    }
+  if (activeGenre !== 'Tous') {
+    filtered = filtered.filter(g => g.genre === activeGenre);
+  }
+
+  if (searchQuery) {
+    filtered = filtered.filter(g =>
+      g.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  countEl.textContent = `${filtered.length} jeu`;
   catalogueEl.innerHTML = '';
 
-  if(!filtered.length) {
+  if (!filtered.length) {
     emptyStateEl.classList.remove('hidden');
     catalogueEl.classList.add('hidden');
     return;
@@ -51,9 +54,7 @@ function renderCatalogue() {
   emptyStateEl.classList.add('hidden');
   catalogueEl.classList.remove('hidden');
 
-  countEl.textContent = `${filtered.length} jeu`;
-
-   filtered.forEach(game => {
+  filtered.forEach(game => {
     const card = document.createElement('div');
     card.className =
       'bg-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-indigo-500 transition-all duration-300 shadow-lg hover:shadow-indigo-900/40';
@@ -85,6 +86,10 @@ function renderCatalogue() {
     catalogueEl.appendChild(card);
   });
 
+   
+  catalogueEl.querySelectorAll('.add-btn').forEach(btn =>
+    btn.addEventListener('click', () => addToCart(+btn.dataset.id, btn))
+  );
 }
 
 
@@ -131,7 +136,7 @@ function addToCart(id, btn) {
 
   item ? item.qty++ : cart.push({ game, qty:1 });
 
-  saveCard();
+  saveCart();
 
   if(btn) {
     const old = btn.innerHTML;
@@ -151,10 +156,67 @@ const hideCart = () => {
   document.body.style.overflow = '';
 }
 
+function renderCart() {
+  cartListEl.innerHTML = '';
+
+  if (!cart.length) {
+    cartEmptyEl.classList.remove('hidden');
+    cartFooterEl.classList.add('hidden');
+    return;
+  }
+
+  cartEmptyEl.classList.add('hidden');
+  cartFooterEl.classList.remove('hidden');
+
+  cart.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'flex items-center gap-3 bg-gray-800 rounded-xl p-3 border border-gray-700/60';
+
+    row.innerHTML = `
+      <img src="${item.game.image}" class="w-20 h-14 object-cover rounded-lg" />
+
+      <div class="flex-1 min-w-0">
+        <p class="text-white font-semibold text-sm line-clamp-2">${item.game.title}</p>
+        <p class="text-gray-400 text-xs mt-0.5">${item.game.genre}</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button data-id="${item.game.id}" data-action="dec" class="qty-btn w-7 h-7 bg-gray-700 text-white rounded-lg">-</button>
+        <span class="text-white font-bold text-sm w-4 text-center">${item.qty}</span>
+        <button data-id="${item.game.id}" data-action="inc" class="qty-btn w-7 h-7 bg-gray-700 text-white rounded-lg">+</button>
+      </div>
+
+      <span class="text-indigo-400 font-bold text-sm w-20 text-right">
+        ${fmt(item.game.price * item.qty)}
+      </span>
+
+      <button data-id="${item.game.id}" class="del-btn text-gray-400 hover:text-red-400">
+        <i class="fas fa-trash"></i>
+      </button>
+    `;
+
+    cartListEl.appendChild(row);
+  });
+
+  // Total
+  const total = cart.reduce((s, i) => s + i.game.price * i.qty, 0);
+  cartTotalEl.textContent = fmt(total);
+
+  // Attach events
+  cartListEl.querySelectorAll('.qty-btn').forEach(btn =>
+    btn.addEventListener('click', () => changeQty(+btn.dataset.id, btn.dataset.action))
+  );
+
+  cartListEl.querySelectorAll('.del-btn').forEach(btn =>
+    btn.addEventListener('click', () => removeItem(+btn.dataset.id))
+  );
+}
+
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
   renderCatalogue();
 });
+
 
 
 cartBtn.addEventListener('click', showCart);

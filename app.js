@@ -141,6 +141,11 @@ function addToCart(id, btn) {
 
 }
 
+const showCard = () => {
+  cartPage.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
   renderCatalogue();

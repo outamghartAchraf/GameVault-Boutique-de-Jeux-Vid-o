@@ -88,4 +88,39 @@ function renderCatalogue() {
 }
 
 
+categories.forEach((cat, index) => {
+  const btn = document.createElement("button");
+
+  btn.textContent = cat;
+
+  btn.className =
+    "text-xs font-semibold px-4 py-2 rounded-xl transition hover:scale-105";
+
+  if (index === 0) {
+    btn.classList.add("bg-indigo-600", "text-white");
+  } else {
+    btn.classList.add("bg-gray-800", "text-gray-400", "hover:bg-gray-700", "hover:text-white");
+  }
+
+  btn.addEventListener("click", () => {
+
+    // remove active from all
+    filtersEl.querySelectorAll("button").forEach(b => {
+      b.classList.remove("bg-indigo-600", "text-white");
+      b.classList.add("bg-gray-800", "text-gray-400");
+    });
+
+    
+    btn.classList.add("bg-indigo-600", "text-white");
+    btn.classList.remove("bg-gray-800", "text-gray-400");
+
+   
+    activeGenre = cat;
+    renderCatalogue();
+  });
+
+  filtersEl.appendChild(btn);
+});
+
+
 renderCatalogue();

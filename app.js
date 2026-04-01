@@ -212,6 +212,23 @@ function renderCart() {
   );
 }
 
+function changeQty(id, action) {
+  const item = cart.find(i => i.game.id === id);
+  if (!item) return;
+
+  item.qty += action === 'inc' ? 1 : -1;
+
+  if (item.qty <= 0) {
+    cart = cart.filter(i => i.game.id !== id);
+  }
+
+  saveCart();
+ 
+  renderCart();
+}
+
+ 
+
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
   renderCatalogue();
@@ -223,3 +240,4 @@ cartBtn.addEventListener('click', showCart);
 backBtn.addEventListener('click', hideCart);
 
 renderCatalogue();
+renderCart();

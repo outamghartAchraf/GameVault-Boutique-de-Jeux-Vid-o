@@ -240,6 +240,26 @@ function updateBadge() {
   badgeEl.classList.toggle('hidden', total === 0);
 }
 
+let toastTimer;
+
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.remove('opacity-0');
+  toastEl.classList.add('opacity-100');
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    toastEl.classList.add('opacity-0');
+    toastEl.classList.remove('opacity-100');
+  }, 3000);
+}
+
+ 
+searchInput.addEventListener('input', e => {
+  searchQuery = e.target.value;
+  renderCatal
+
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
   renderCatalogue();

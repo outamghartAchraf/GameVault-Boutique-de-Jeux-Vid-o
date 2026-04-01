@@ -187,7 +187,7 @@ function renderCart() {
       </div>
 
       <span class="text-indigo-400 font-bold text-sm w-20 text-right">
-        ${fmt(item.game.price * item.qty)}
+        ${(item.game.price * item.qty)}
       </span>
 
       <button data-id="${item.game.id}" class="del-btn text-gray-400 hover:text-red-400">
@@ -200,7 +200,7 @@ function renderCart() {
 
   // Total
   const total = cart.reduce((s, i) => s + i.game.price * i.qty, 0);
-  cartTotalEl.textContent = fmt(total);
+  cartTotalEl.textContent =  (total);
 
   // Attach events
   cartListEl.querySelectorAll('.qty-btn').forEach(btn =>
@@ -233,6 +233,12 @@ const removeItem = id => {
  
   renderCart();
 };
+
+function updateBadge() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  badgeEl.textContent = total;
+  badgeEl.classList.toggle('hidden', total === 0);
+}
 
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;

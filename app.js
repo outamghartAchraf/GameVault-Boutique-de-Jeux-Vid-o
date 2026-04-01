@@ -1,4 +1,6 @@
 import { games } from './data.js';
+
+const CART_KEY = 'gamevault_cart';
 let cart = [];
 let activeGenre = 'Tous';
 let searchQuery = '';
@@ -21,3 +23,5 @@ const cartTotalEl = document.getElementById('cartTotal');
 const orderBtn = document.getElementById('orderBtn');
 
 const toastEl = document.getElementById('toast');
+
+const loadCard = () => cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];

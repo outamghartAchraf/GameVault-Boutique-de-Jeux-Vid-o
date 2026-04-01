@@ -4,6 +4,8 @@ const CART_KEY = 'gamevault_cart';
 let cart = [];
 let activeGenre = 'Tous';
 let searchQuery = '';
+const categories = ["Tous", ...new Set(games.map(g => g.genre))];
+
 
 const catalogueEl = document.getElementById('catalogue');
 const emptyStateEl = document.getElementById('emptyState');
@@ -28,9 +30,19 @@ const loadCard = () => cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 const saveCard = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
 function renderCatalogue() {
+    let filtered = games;
+     
+    if(activeGenre !== "Tous") {
+      filtered = filtered.filter(g => g.genre === activeGenre);
+    }
+
+    if(searchQuery) {
+      filtered = filtered.filter(g => 
+        g.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
   catalogueEl.innerHTML = '';
 
-  if(!games.length) {
+  if(!filtered.length) {
     emptyStateEl.classList.remove('hidden');
     catalogueEl.classList.add('hidden');
     return;
@@ -39,7 +51,9 @@ function renderCatalogue() {
   emptyStateEl.classList.add('hidden');
   catalogueEl.classList.remove('hidden');
 
-   games.forEach(game => {
+  countEl.textContent = `${filtered.length} jeu`;
+
+   filtered.forEach(game => {
     const card = document.createElement('div');
     card.className =
       'bg-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-indigo-500 transition-all duration-300 shadow-lg hover:shadow-indigo-900/40';

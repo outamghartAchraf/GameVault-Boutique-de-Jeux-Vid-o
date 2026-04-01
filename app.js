@@ -227,7 +227,12 @@ function changeQty(id, action) {
   renderCart();
 }
 
+const removeItem = id => {
+  cart = cart.filter(i => i.game.id !== id);
+  saveCart();
  
+  renderCart();
+};
 
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;

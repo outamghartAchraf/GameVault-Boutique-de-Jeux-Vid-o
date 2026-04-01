@@ -25,3 +25,5 @@ const orderBtn = document.getElementById('orderBtn');
 const toastEl = document.getElementById('toast');
 
 const loadCard = () => cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+const saveCard = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
+

@@ -27,3 +27,51 @@ const toastEl = document.getElementById('toast');
 const loadCard = () => cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 const saveCard = () => localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
+function renderCatalogue() {
+  catalogueEl.innerHTML = '';
+
+  if(!games.length) {
+    emptyStateEl.classList.remove('hidden');
+    catalogueEl.classList.add('hidden');
+    return;
+  }
+
+  emptyStateEl.classList.add('hidden');
+  catalogueEl.classList.remove('hidden');
+
+   games.forEach(game => {
+    const card = document.createElement('div');
+    card.className =
+      'bg-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-indigo-500 transition-all duration-300 shadow-lg hover:shadow-indigo-900/40';
+
+    card.innerHTML = `
+      <div class="relative group overflow-hidden rounded-2xl">
+        <!-- Image -->
+        <img src="${game.image}" class="w-full aspect-video object-cover transform group-hover:scale-110 transition duration-500" />
+
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+
+        <!-- Genre Badge -->
+        <span class="absolute top-3 left-3 bg-indigo-600/90 text-white text-xs px-3 py-1 rounded-full backdrop-blur">${game.genre}</span>
+
+        <!-- Content -->
+        <div class="absolute bottom-0 p-4 w-full flex flex-col gap-3">
+          <h2 class="text-white font-bold text-base leading-tight line-clamp-2">${game.title}</h2>
+          <div class="flex items-center justify-between">
+            <span class="text-indigo-400 font-extrabold text-lg">${(game.price)}</span>
+            <button data-id="${game.id}" class="add-btn flex items-center gap-1 bg-indigo-600/90 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-lg backdrop-blur transition transform hover:scale-105 active:scale-95">
+              <i class="fa-solid fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    catalogueEl.appendChild(card);
+  });
+
+}
+
+
+renderCatalogue();

@@ -7,6 +7,7 @@ let cart = [];
 let activeGenre = 'Tous';
 let searchQuery = '';
 const categories = ["Tous", ...new Set(games.map(g => g.genre))];
+ 
 
 /* ─── DOM ─── */
 const catalogueEl = document.getElementById('catalogue');
@@ -310,11 +311,7 @@ cartBtn.addEventListener('click', showCart);
 backBtn.addEventListener('click', hideCart);
 orderBtn.addEventListener('click', placeOrder);
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') hideCart();
-});
 
- 
 loadCart();
 updateBadge();
 renderCatalogue();
